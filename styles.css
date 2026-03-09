@@ -1,0 +1,374 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: #efefef;
+  color: #141414;
+}
+
+.app-shell {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  min-height: 100vh;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+}
+
+.form-panel {
+  padding: 18px;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+}
+
+.helper-text {
+  margin: 0 0 14px;
+  color: #4e4e4e;
+  line-height: 1.45;
+}
+
+form {
+  display: grid;
+  gap: 12px;
+}
+
+.field-group {
+  display: grid;
+  gap: 8px;
+}
+
+label {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 10px 11px;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.field-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: #202020;
+  color: #fff;
+  font-weight: 600;
+}
+
+.tool-btn {
+  padding: 6px 8px;
+  min-width: 36px;
+  border: 1px solid #c8c8c8;
+  background: #f6f6f6;
+  color: #202020;
+  border-radius: 7px;
+  font-size: 0.82rem;
+}
+
+.tool-btn.active {
+  background: #202020;
+  color: #fff;
+  border-color: #202020;
+}
+
+.print-note {
+  margin: 2px 0 0;
+  color: #5a5a5a;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.button-row {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button.ghost {
+  background: #efefef;
+  color: #151515;
+}
+
+.preview-panel {
+  padding: 18px;
+  display: grid;
+  place-items: center;
+  background: #ebebeb;
+}
+
+.cover-page {
+  width: min(100%, 860px);
+  aspect-ratio: 1 / 1.414;
+  background: #f7f7f7;
+  border: 1px solid #222;
+  padding: 6px;
+}
+
+.inner-border {
+  height: 100%;
+  border: 1px solid #222;
+  padding: 26px 36px 34px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.college-header {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-wrap {
+  width: 64px;
+  height: 64px;
+}
+
+.logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.college-text {
+  text-align: center;
+}
+
+.college-name {
+  margin: 0;
+  font-size: clamp(16px, 1.8vw, 32px);
+  white-space: nowrap;
+}
+
+.college-city {
+  margin: 4px 0 0;
+  font-size: clamp(15px, 1.3vw, 32px);
+}
+
+.center-content {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 26px;
+  padding: 0 24px;
+}
+
+.assignment-title {
+  margin: 0;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 74px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  text-align: center;
+  width: 100%;
+  min-height: 2.5em;
+  display: grid;
+  place-items: center;
+}
+
+.subject-line {
+  margin: 0;
+  font-size: 58px;
+  line-height: 1.15;
+  text-align: center;
+  width: 100%;
+  min-height: 1.7em;
+  display: grid;
+  place-items: center;
+}
+
+.submitted-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  gap: 18px;
+}
+
+.submitted-block {
+  max-width: 100%;
+}
+
+.submitted-block.right {
+  text-align: right;
+  justify-self: end;
+  width: min(320px, 100%);
+}
+
+.label {
+  margin: 0 0 4px;
+  font-size: clamp(20px, 1.5vw, 34px);
+}
+
+.value {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.35;
+  min-height: 3.9em;
+  white-space: pre-line;
+}
+
+
+.assignment-title,
+.subject-line,
+.value {
+  font-weight: 400;
+  font-style: normal;
+  text-decoration: none;
+  transition: font-size 0.15s ease;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+@page {
+  size: A4 portrait;
+  margin: 18mm;
+}
+
+@media print {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height: auto;
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .form-panel {
+    display: none !important;
+  }
+
+  .print-note {
+    display: none !important;
+  }
+
+  .app-shell {
+    display: block;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .preview-panel {
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: #fff;
+    display: block;
+  }
+
+  .panel {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .cover-page {
+    width: 100%;
+    height: calc(297mm - 36mm);
+    margin: 0;
+    border: 1px solid #111;
+    padding: 2mm;
+    box-shadow: none;
+    background: #fff;
+    box-sizing: border-box;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .inner-border {
+    border: 1px solid #111;
+    height: 100%;
+    padding: 5mm 7mm 7mm;
+    grid-template-rows: auto 1fr auto;
+    box-sizing: border-box;
+  }
+
+  .college-header {
+    grid-template-columns: 18mm minmax(0, 1fr);
+    gap: 4mm;
+    align-items: center;
+  }
+
+  .logo-wrap {
+    width: 17mm;
+    height: 17mm;
+  }
+
+  .college-text {
+    text-align: center;
+    padding-right: 3mm;
+    min-width: 0;
+  }
+
+  .college-name {
+    font-size: 7.4mm;
+    line-height: 1.08;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .college-city {
+    font-size: 4.8mm;
+    line-height: 1.1;
+  }
+
+  .submitted-section {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8mm;
+  }
+
+  .submitted-block.right {
+    width: 100%;
+    justify-self: end;
+    min-width: 0;
+    text-align: right;
+  }
+
+  .label {
+    font-size: 5.8mm;
+  }
+
+  .value {
+    font-size: 6.4mm;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}

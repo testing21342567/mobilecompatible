@@ -111,12 +111,16 @@ async function renderCoverPdfArrayBuffer() {
 
   const pageWidth = 210;
   const pageHeight = 297;
+  const safeMargin = 6;
+  const maxWidth = pageWidth - safeMargin * 2;
+  const maxHeight = pageHeight - safeMargin * 2;
+
   const imgRatio = canvas.width / canvas.height;
-  let renderWidth = pageWidth;
+  let renderWidth = maxWidth;
   let renderHeight = renderWidth / imgRatio;
 
-  if (renderHeight > pageHeight) {
-    renderHeight = pageHeight;
+  if (renderHeight > maxHeight) {
+    renderHeight = maxHeight;
     renderWidth = renderHeight * imgRatio;
   }
 

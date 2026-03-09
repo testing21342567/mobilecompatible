@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment Cover Page Generator</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="panel form-panel">
+        <h1>Assignment Cover Page Generator</h1>
+        <p class="helper-text">Enter details and use A-/A+ and B/I/U controls next to each field.</p>
+
+        <form id="cover-form" novalidate>
+          <div class="field-group">
+            <label for="assignmentName">Assignment Name</label>
+            <input id="assignmentName" name="assignmentName" type="text" maxlength="160" placeholder="e.g., Financial Accounting Assignment" required />
+            <div class="field-tools" data-field="assignmentName">
+              <button type="button" class="tool-btn" data-action="decrease" title="Decrease size">A-</button>
+              <button type="button" class="tool-btn" data-action="increase" title="Increase size">A+</button>
+              <button type="button" class="tool-btn" data-action="bold" title="Bold">B</button>
+              <button type="button" class="tool-btn" data-action="italic" title="Italic">I</button>
+              <button type="button" class="tool-btn" data-action="underline" title="Underline">U</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="subject">Subject</label>
+            <input id="subject" name="subject" type="text" maxlength="120" placeholder="e.g., Financial Accounting" required />
+            <div class="field-tools" data-field="subject">
+              <button type="button" class="tool-btn" data-action="decrease">A-</button>
+              <button type="button" class="tool-btn" data-action="increase">A+</button>
+              <button type="button" class="tool-btn" data-action="bold">B</button>
+              <button type="button" class="tool-btn" data-action="italic">I</button>
+              <button type="button" class="tool-btn" data-action="underline">U</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="submittedTo">Submitted To</label>
+            <input id="submittedTo" name="submittedTo" type="text" maxlength="160" placeholder="e.g., Teacher, Department, Course" required />
+            <div class="field-tools" data-field="submittedTo">
+              <button type="button" class="tool-btn" data-action="decrease">A-</button>
+              <button type="button" class="tool-btn" data-action="increase">A+</button>
+              <button type="button" class="tool-btn" data-action="bold">B</button>
+              <button type="button" class="tool-btn" data-action="italic">I</button>
+              <button type="button" class="tool-btn" data-action="underline">U</button>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="submittedBy">Submitted By</label>
+            <input id="submittedBy" name="submittedBy" type="text" maxlength="200" placeholder="Student name, Register Number, Class" required />
+            <div class="field-tools" data-field="submittedBy">
+              <button type="button" class="tool-btn" data-action="decrease">A-</button>
+              <button type="button" class="tool-btn" data-action="increase">A+</button>
+              <button type="button" class="tool-btn" data-action="bold">B</button>
+              <button type="button" class="tool-btn" data-action="italic">I</button>
+              <button type="button" class="tool-btn" data-action="underline">U</button>
+            </div>
+          </div>
+
+          <p class="print-note">For clean PDF output, disable <strong>Headers and footers</strong> in the print dialog.</p>
+
+          <div class="button-row">
+            <button type="button" id="resetBtn" class="ghost">Reset</button>
+            <button type="button" id="downloadPdfBtn" class="ghost">Download Clean PDF</button>
+            <button type="button" id="printBtn">Print / Save PDF</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel preview-panel">
+        <article class="cover-page" id="coverPage">
+          <div class="inner-border">
+            <header class="college-header">
+              <div class="logo-wrap" aria-hidden="true">
+                <img class="logo-image" src="logo.svg" alt="St. Joseph's College of Commerce logo" />
+              </div>
+              <div class="college-text">
+                <p class="college-name">St. Joseph’s College of Commerce (Autonomous)</p>
+                <p class="college-city">Bengaluru, India</p>
+              </div>
+            </header>
+
+            <section class="center-content">
+              <h2 id="previewAssignment" class="assignment-title fit-text" data-min-size="20" data-max-size="74">ASSIGNMENT NAME</h2>
+              <p id="previewSubject" class="subject-line fit-text" data-min-size="18" data-max-size="58">Subject</p>
+            </section>
+
+            <footer class="submitted-section">
+              <div class="submitted-block left">
+                <p class="label">Submitted to:</p>
+                <p id="previewSubmittedTo" class="value fit-text" data-min-size="18" data-max-size="44">Teacher</p>
+              </div>
+
+              <div class="submitted-block right">
+                <p class="label">Submitted by:</p>
+                <p id="previewSubmittedBy" class="value fit-text" data-min-size="16" data-max-size="42">Student name<br />Register Number<br />Class</p>
+              </div>
+            </footer>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

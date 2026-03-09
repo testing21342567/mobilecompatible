@@ -99,11 +99,30 @@ async function renderCoverPdfArrayBuffer() {
   }
 
   const coverPage = document.getElementById("coverPage");
-  const canvas = await window.html2canvas(coverPage, {
-    scale: 2,
-    backgroundColor: "#ffffff",
-    useCORS: true
-  });
+
+  const captureHost = document.createElement("div");
+  captureHost.style.position = "fixed";
+  captureHost.style.left = "-10000px";
+  captureHost.style.top = "0";
+  captureHost.style.background = "#ffffff";
+  captureHost.style.padding = "22px";
+  captureHost.style.boxSizing = "border-box";
+
+  const clonedCover = coverPage.cloneNode(true);
+  clonedCover.style.margin = "0";
+  captureHost.appendChild(clonedCover);
+  document.body.appendChild(captureHost);
+
+  let canvas;
+  try {
+    canvas = await window.html2canvas(captureHost, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+      useCORS: true
+    });
+  } finally {
+    document.body.removeChild(captureHost);
+  }
 
   const imgData = canvas.toDataURL("image/png");
   const { jsPDF } = window.jspdf;

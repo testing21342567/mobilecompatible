@@ -2,6 +2,8 @@ const form = document.getElementById("cover-form");
 const printBtn = document.getElementById("printBtn");
 const resetBtn = document.getElementById("resetBtn");
 const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+const mergePdfBtn = document.getElementById("mergePdfBtn");
+const appendPdfInput = document.getElementById("appendPdf");
 
 const fields = {
   assignmentName: {
@@ -73,6 +75,42 @@ function updatePreview() {
   });
 }
 
+async function renderCoverPdfArrayBuffer() {
+  updatePreview();
+
+  if (!window.html2canvas || !window.jspdf) {
+    throw new Error("PDF rendering libraries failed to load");
+  }
+
+  const coverPage = document.getElementById("coverPage");
+  const canvas = await window.html2canvas(coverPage, {
+    scale: 2,
+    backgroundColor: "#ffffff",
+    useCORS: true
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const imgRatio = canvas.width / canvas.height;
+  let renderWidth = pageWidth;
+  let renderHeight = renderWidth / imgRatio;
+
+  if (renderHeight > pageHeight) {
+    renderHeight = pageHeight;
+    renderWidth = renderHeight * imgRatio;
+  }
+
+  const x = (pageWidth - renderWidth) / 2;
+  const y = (pageHeight - renderHeight) / 2;
+
+  pdf.addImage(imgData, "PNG", x, y, renderWidth, renderHeight, undefined, "FAST");
+  return pdf.output("arraybuffer");
+}
+
 Object.values(fields).forEach(({ input }) => {
   input.addEventListener("input", updatePreview);
 });
@@ -105,42 +143,58 @@ printBtn.addEventListener("click", () => {
 
 downloadPdfBtn.addEventListener("click", async () => {
   try {
-    updatePreview();
+    const pdfBytes = await renderCoverPdfArrayBuffer();
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "assignment-cover-page.pdf";
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    alert("Could not generate PDF. Please try again.");
+    console.error(error);
+  }
+});
 
-    if (!window.html2canvas || !window.jspdf) {
-      alert("PDF libraries failed to load. Please check internet and try again.");
+mergePdfBtn.addEventListener("click", async () => {
+  try {
+    const file = appendPdfInput.files && appendPdfInput.files[0];
+    if (!file) {
+      alert("Please upload a PDF first.");
       return;
     }
 
-    const coverPage = document.getElementById("coverPage");
-    const canvas = await window.html2canvas(coverPage, {
-      scale: 2,
-      backgroundColor: "#ffffff",
-      useCORS: true
-    });
-
-    const imgData = canvas.toDataURL("image/png");
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-
-    const pageWidth = 210;
-    const pageHeight = 297;
-    const imgRatio = canvas.width / canvas.height;
-    let renderWidth = pageWidth;
-    let renderHeight = renderWidth / imgRatio;
-
-    if (renderHeight > pageHeight) {
-      renderHeight = pageHeight;
-      renderWidth = renderHeight * imgRatio;
+    if (!window.PDFLib) {
+      alert("PDF merge library failed to load. Please check internet and try again.");
+      return;
     }
 
-    const x = (pageWidth - renderWidth) / 2;
-    const y = (pageHeight - renderHeight) / 2;
+    const coverPdfBytes = await renderCoverPdfArrayBuffer();
+    const uploadedPdfBytes = await file.arrayBuffer();
 
-    pdf.addImage(imgData, "PNG", x, y, renderWidth, renderHeight, undefined, "FAST");
-    pdf.save("assignment-cover-page.pdf");
+    const mergedPdf = await window.PDFLib.PDFDocument.create();
+    const coverPdf = await window.PDFLib.PDFDocument.load(coverPdfBytes);
+    const uploadedPdf = await window.PDFLib.PDFDocument.load(uploadedPdfBytes);
+
+    const coverPages = await mergedPdf.copyPages(coverPdf, coverPdf.getPageIndices());
+    coverPages.forEach((page) => mergedPdf.addPage(page));
+
+    const docPages = await mergedPdf.copyPages(uploadedPdf, uploadedPdf.getPageIndices());
+    docPages.forEach((page) => mergedPdf.addPage(page));
+
+    const mergedBytes = await mergedPdf.save();
+    const mergedBlob = new Blob([mergedBytes], { type: "application/pdf" });
+    const mergedUrl = URL.createObjectURL(mergedBlob);
+
+    const link = document.createElement("a");
+    link.href = mergedUrl;
+    link.download = "cover-plus-assignment.pdf";
+    link.click();
+
+    URL.revokeObjectURL(mergedUrl);
   } catch (error) {
-    alert("Could not generate PDF. Please try again.");
+    alert("Could not merge PDFs. Please ensure the uploaded file is a valid PDF.");
     console.error(error);
   }
 });

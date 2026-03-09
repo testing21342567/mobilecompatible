@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   </head>
   <body>
     <main class="app-shell">
@@ -63,11 +64,18 @@
             </div>
           </div>
 
+          
+          <div class="field-group">
+            <label for="appendPdf">Upload Assignment PDF (optional)</label>
+            <input id="appendPdf" name="appendPdf" type="file" accept="application/pdf" />
+          </div>
+
           <p class="print-note">For clean PDF output, disable <strong>Headers and footers</strong> in the print dialog.</p>
 
           <div class="button-row">
             <button type="button" id="resetBtn" class="ghost">Reset</button>
             <button type="button" id="downloadPdfBtn" class="ghost">Download Clean PDF</button>
+            <button type="button" id="mergePdfBtn" class="ghost">Cover + Uploaded PDF</button>
             <button type="button" id="printBtn">Print / Save PDF</button>
           </div>
         </form>

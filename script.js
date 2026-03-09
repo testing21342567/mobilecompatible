@@ -66,6 +66,22 @@ function applyFormatting(fieldName) {
   output.style.textUnderlineOffset = state.underline ? "0.12em" : "";
 }
 
+
+function triggerFileDownload(blob, fileName) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  setTimeout(() => {
+    URL.revokeObjectURL(url);
+  }, 60000);
+}
+
 function updatePreview() {
   Object.entries(fields).forEach(([fieldName, { input, output, fallback, transform }]) => {
     const rawValue = input.value.trim() || fallback;
@@ -145,12 +161,7 @@ downloadPdfBtn.addEventListener("click", async () => {
   try {
     const pdfBytes = await renderCoverPdfArrayBuffer();
     const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "assignment-cover-page.pdf";
-    a.click();
-    URL.revokeObjectURL(url);
+    triggerFileDownload(blob, "assignment-cover-page.pdf");
   } catch (error) {
     alert("Could not generate PDF. Please try again.");
     console.error(error);
@@ -185,14 +196,7 @@ mergePdfBtn.addEventListener("click", async () => {
 
     const mergedBytes = await mergedPdf.save();
     const mergedBlob = new Blob([mergedBytes], { type: "application/pdf" });
-    const mergedUrl = URL.createObjectURL(mergedBlob);
-
-    const link = document.createElement("a");
-    link.href = mergedUrl;
-    link.download = "cover-plus-assignment.pdf";
-    link.click();
-
-    URL.revokeObjectURL(mergedUrl);
+    triggerFileDownload(mergedBlob, "cover-plus-assignment.pdf");
   } catch (error) {
     alert("Could not merge PDFs. Please ensure the uploaded file is a valid PDF.");
     console.error(error);
